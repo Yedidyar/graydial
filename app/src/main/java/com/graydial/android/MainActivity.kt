@@ -69,12 +69,16 @@ class MainActivity : ComponentActivity() {
         if (launch != null) startActivity(launch) else openShizukuStore()
     }
 
-    /** Opens the store / official page in another app. GrayDial itself makes no network requests. */
+    /**
+     * Opens Shizuku in Google Play explicitly (a plain market:// link is claimed by Xiaomi GetApps
+     * on HyperOS), then falls back to the official page. GrayDial itself makes no network requests.
+     */
     private fun openShizukuStore() {
-        val market = Intent(Intent.ACTION_VIEW, "market://details?id=${ShizukuConnectionManager.SHIZUKU_PACKAGE}".toUri())
+        val play = Intent(Intent.ACTION_VIEW, "market://details?id=${ShizukuConnectionManager.SHIZUKU_PACKAGE}".toUri())
+            .setPackage(PLAY_STORE_PACKAGE)
         val web = Intent(Intent.ACTION_VIEW, "https://shizuku.rikka.app/download/".toUri())
         try {
-            startActivity(market)
+            startActivity(play)
         } catch (_: ActivityNotFoundException) {
             try {
                 startActivity(web)
@@ -85,4 +89,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun toast(text: String) = Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+    private companion object {
+        const val PLAY_STORE_PACKAGE = "com.android.vending"
+    }
 }
