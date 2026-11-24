@@ -31,8 +31,13 @@ It uses Android's own compositor color pipeline (`ColorDisplayService` global sa
 
 ## Install
 
-1. Build the app (see below) or get a signed APK from the owner.
-2. Install it: `adb install app-debug.apk`, or open the APK on the phone.
+1. On the phone, open the [latest release](https://github.com/Yedidyar/graydial/releases/latest) and download `graydial-vX.Y.Z.apk`.
+2. Open the file. Android asks you to allow installs from your browser or file manager; allow it for this install.
+3. Optional: check the download against the `.sha256` file published alongside it.
+
+**Updates:** install the newer APK over the old one; your settings are kept. To get notified automatically, add this repository's URL to [Obtainium](https://github.com/ImranR98/Obtainium).
+
+Every release is built and signed by the [Release workflow](.github/workflows/release.yml), straight from the tagged source.
 
 ## Set up Shizuku (on the phone, no computer)
 
@@ -81,7 +86,7 @@ You need JDK 17+ (JDK 21 tested) and the Android SDK with platform `android-37.2
 echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
 ./gradlew assembleDebug          # app/build/outputs/apk/debug/app-debug.apk
 ./gradlew testDebugUnitTest lintDebug
-./gradlew assembleRelease        # unsigned, minified; sign it outside the repo
+./gradlew assembleRelease        # unsigned unless signing is configured (below)
 ```
 
 Dependency verification is on. If you change dependencies, run:
@@ -90,6 +95,15 @@ Dependency verification is on. If you change dependencies, run:
 ./gradlew --write-verification-metadata sha256 assembleDebug assembleRelease testDebugUnitTest lintDebug assembleDebugAndroidTest
 ./gradlew :app:dependencies --write-locks
 ```
+
+## Releasing (maintainers)
+
+1. One time only: run `scripts/setup-release-signing.sh`. It creates the signing key outside the repo and stores it as GitHub Actions secrets. Back up the key; every future update must be signed with it.
+2. Bump `versionCode` and `versionName` in `app/build.gradle.kts`, then commit.
+3. Tag and push. The Release workflow tests, signs and publishes the APK:
+   ```bash
+   git tag v0.1.0 && git push origin v0.1.0
+   ```
 
 ## Known limitations
 

@@ -1,7 +1,27 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+/*
+ * Release signing. Credentials are NEVER stored in the repository. Provide them either in
+ * `keystore.properties` at the project root (git-ignored):
+ *   storeFile=/absolute/path/to/graydial-upload.jks
+ *   storePassword=...
+ *   keyAlias=upload
+ *   keyPassword=...
+ * or via environment variables GRAYDIAL_STORE_FILE / _STORE_PASSWORD / _KEY_ALIAS / _KEY_PASSWORD.
+ * Without them, `assembleRelease` produces an unsigned APK.
+ */
+val signingProps = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+fun signingValue(key: String, env: String): String? =
+    signingProps.getProperty(key) ?: System.getenv(env)
+val releaseStoreFile = signingValue("storeFile", "GRAYDIAL_STORE_FILE")
 
 android {
     namespace = "com.graydial.android"
@@ -10,8 +30,8 @@ android {
     }
 
     defaultConfig {
-        // Provisional identifier. Replace with an owner-controlled namespace before public distribution.
-        applicationId = "com.graydial.android"
+        // Permanent public identifier (owner-controlled via github.com/Yedidyar). Never change after release.
+        applicationId = "io.github.yedidyar.graydial"
         minSdk = 30 // Android 11: `cmd color_display` and on-device wireless debugging.
         targetSdk = 37
         versionCode = 1
@@ -20,15 +40,26 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (releaseStoreFile != null) {
+            create("release") {
+                storeFile = file(releaseStoreFile)
+                storePassword = signingValue("storePassword", "GRAYDIAL_STORE_PASSWORD")
+                keyAlias = signingValue("keyAlias", "GRAYDIAL_KEY_ALIAS")
+                keyPassword = signingValue("keyPassword", "GRAYDIAL_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // No signing config here on purpose: signing credentials must never live in the repo.
         }
     }
 

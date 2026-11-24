@@ -70,7 +70,8 @@ Check it yourself:
 - Every version is pinned in `gradle/libs.versions.toml`, and all transitive versions are locked in `app/gradle.lockfile`.
 - **Gradle dependency verification** is enabled: `gradle/verification-metadata.xml` holds SHA-256 checksums for 370 components, plugins included.
 - The full runtime inventory and licenses are in `DEPENDENCIES.md`.
-- No secrets or signing material are in the repository. `.gitignore` excludes `*.jks`, `*.keystore`, `keystore.properties` and `local.properties`. The release build is unsigned; sign it out-of-tree.
+- No secrets or signing material are in the repository. `.gitignore` excludes `*.jks`, `*.keystore`, `keystore.properties` and `local.properties`. Release signing credentials live only in GitHub Actions secrets and the maintainer's offline backup; the Release workflow decodes the key into the runner's temp directory and deletes it after signing.
+- CI actions are pinned to full commit SHAs, workflows default to read-only tokens, and the Gradle wrapper is validated on every run.
 
 ## Phase 4 review findings and resolutions
 
