@@ -45,15 +45,20 @@ UI (Compose)                    Quick Settings tile
 - **Tile is conservative.** The tile shows only the last applied state. While a change runs it shows "Applying…". Afterwards it asks the system to re-query (`requestListeningState`).
 - **Spectrum preview** uses the exact AOSP saturation matrix (`ColorMath`).
 
+## Setup wizard
+
+`SetupWizard` (pure, unit-tested) maps `PermissionState` to one of Install / Start / Grant / Reconnect / Unsupported / Done and to the single button action of that step. `SetupWizardCard` renders it and shrinks to a one-line "Ready" when done. Launcher shortcuts go through `ShortcutActivity`, which runs the same `GrayDialController` calls as the tile.
+
 ## Package layout
 
 ```
 com.graydial.android
   MainActivity, GrayDialApplication (AppContainer)
   domain/   GrayscaleIntensity, Preset, SaturationController, SaturationException,
-            PermissionState(+Resolver), GrayDialController, LatestValueApplier, ColorMath
+            PermissionState(+Resolver), SetupWizard, GrayDialController, LatestValueApplier, ColorMath
   data/     PreferencesRepository
   system/   ShizukuConnectionManager, ShizukuSaturationController, ShizukuColorDisplay
+  ShortcutActivity (invisible launcher-shortcut target)
   tile/     GrayDialTileService
   ui/       GrayDialScreen, GrayDialViewModel, GrayDialUiState, components/, theme/
 ```

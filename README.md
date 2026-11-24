@@ -16,6 +16,8 @@ It uses Android's own compositor color pipeline (`ColorDisplayService` global sa
 - Your own presets. Move the slider to any level, tap **+ Save N%** to add it next to the built-ins (up to 8), and tap **×** to remove one.
 - A spectrum preview computed with the same matrix Android applies.
 - A Quick Settings tile. Tap to toggle; long-press to open the app.
+- Launcher shortcuts (long-press the app icon): **Grayscale on** and **Restore colors**.
+- A three-step setup wizard (Install Shizuku → Start Shizuku → Grant access) that disappears once access works.
 - A **Restore original colors** button that is always visible.
 - Honest status reporting. GrayDial distinguishes three cases:
   - the command succeeded;

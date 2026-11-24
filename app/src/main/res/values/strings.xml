@@ -8,4 +8,8 @@
     <string name="tile_setup_needed">Setup needed</string>
     <string name="tile_unsupported">Unsupported</string>
     <string name="tile_failed">Not applied</string>
+    <string name="shortcut_on_short">Grayscale on</string>
+    <string name="shortcut_on_long">Turn grayscale on</string>
+    <string name="shortcut_restore_short">Restore colors</string>
+    <string name="shortcut_restore_long">Restore original colors</string>
 </resources>

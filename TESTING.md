@@ -2,9 +2,10 @@
 
 ## Results
 
+| `SetupWizardTest` | Permission state → setup step mapping, progression install → start → grant → done, one action per step, setup skipped when ready |
 | Check | Command | Result |
 |---|---|---|
-| Unit tests (JVM) | `./gradlew testDebugUnitTest` | **64 passed, 0 failed** |
+| Unit tests (JVM) | `./gradlew testDebugUnitTest` | **72 passed, 0 failed** |
 | Android lint | `./gradlew lintDebug` | **No issues found** |
 | Debug / release APK | `./gradlew assembleDebug assembleRelease` | Built (release ~2.1 MB, minified, unsigned) |
 | Instrumented tests on **HyperOS 3.0 / Android 16 device** (Shizuku 13.6.0) | see below | **5 passed, 0 failed, 0 skipped** |
@@ -109,3 +110,9 @@ Then check:
 - [ ] HyperOS Display › Color scheme (Vivid/Saturated/Standard/Advanced), Reading mode, and Night Light.
 - [ ] HDR video (YouTube HDR), video playback, and DRM/secure surfaces (Netflix): note whether they are desaturated.
 - [ ] Screenshots: note whether captures are gray. The system matrix is usually not captured.
+
+## Setup wizard and shortcuts (device, 2026-11-24)
+
+- The wizard replaces the status card: "Step 3 of 3 · Allow GrayDial" appeared with Shizuku running and the app not yet authorized, then collapsed to a one-line "Ready" after authorization. Checked on the HyperOS 3.0 device.
+- Launcher shortcuts "Grayscale on" and "Restore colors" are registered (`dumpsys shortcut`). Firing each shortcut intent changed `dumpsys color_display` Global saturation Activated to true, then false.
+- Not yet checked by a person: long-pressing the launcher icon and tapping the shortcuts.

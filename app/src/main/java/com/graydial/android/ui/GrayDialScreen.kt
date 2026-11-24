@@ -44,9 +44,9 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.graydial.android.domain.ApplyOutcome
-import com.graydial.android.domain.PermissionState
+import com.graydial.android.domain.SetupAction
 import com.graydial.android.domain.Preset
-import com.graydial.android.ui.components.PermissionCard
+import com.graydial.android.ui.components.SetupWizardCard
 import com.graydial.android.ui.components.SpectrumPreview
 import kotlin.math.roundToInt
 
@@ -60,7 +60,7 @@ data class ScreenActions(
     val onRestore: () -> Unit,
     val onReapply: () -> Unit,
     val onDismissRestartNotice: () -> Unit,
-    val onPermissionAction: (PermissionState) -> Unit,
+    val onSetupAction: (SetupAction) -> Unit,
     val onOpenShizuku: () -> Unit,
     val versionName: String,
 )
@@ -96,7 +96,7 @@ fun GrayDialScreen(state: GrayDialUiState, actions: ScreenActions) {
 private fun MainContent(state: GrayDialUiState, actions: ScreenActions, onOpenSettings: () -> Unit) {
     Header(onOpenSettings)
 
-    PermissionCard(state.permission, onAction = { actions.onPermissionAction(state.permission) })
+    SetupWizardCard(state.permission, onAction = actions.onSetupAction)
 
     if (state.resetByRestart) {
         Notice(

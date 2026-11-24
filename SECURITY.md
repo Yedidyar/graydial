@@ -32,6 +32,7 @@ Residual note: Shizuku may keep its copies of the file descriptors passed in the
 | Component | Exported | Protection |
 |---|---|---|
 | `MainActivity` | yes (launcher, `QS_TILE_PREFERENCES`) | Reads no intent data or extras. |
+| `ShortcutActivity` | yes (launcher shortcuts) | Honors only two fixed action strings (`GRAYSCALE_ON`, `RESTORE_COLORS`); reads no data or extras. Any app can trigger them, which is the same power as the tile: turn grayscale on or restore colors. |
 | `GrayDialTileService` | yes | `android.permission.BIND_QUICK_SETTINGS_TILE` (system only). |
 | `rikka.shizuku.ShizukuProvider` | yes | `android.permission.INTERACT_ACROSS_USERS_FULL` (signature/privileged; only system/shell such as the Shizuku server can call it). Required for Shizuku to deliver its binder. |
 | `androidx.startup.InitializationProvider` | no | n/a |
