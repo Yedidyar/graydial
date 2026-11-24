@@ -1,0 +1,22 @@
+# Gradle / build
+.gradle/
+build/
+/app/build/
+.kotlin/
+
+# Local configuration (machine-specific, never commit)
+local.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Signing material and secrets (never commit)
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+*.p12
+*.pem

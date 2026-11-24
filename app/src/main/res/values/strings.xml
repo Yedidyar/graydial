@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GrayDial</string>
+    <string name="tile_label">GrayDial</string>
+    <string name="tile_applying">Applying…</string>
+    <string name="tile_off">Off</string>
+    <string name="tile_percent">%1$d%% gray</string>
+    <string name="tile_setup_needed">Setup needed</string>
+    <string name="tile_unsupported">Unsupported</string>
+    <string name="tile_failed">Not applied</string>
+</resources>
