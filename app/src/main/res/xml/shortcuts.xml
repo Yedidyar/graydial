@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="grayscale_on"
+        android:enabled="true"
+        android:icon="@drawable/ic_tile"
+        android:shortcutShortLabel="@string/shortcut_on_short"
+        android:shortcutLongLabel="@string/shortcut_on_long">
+        <intent
+            android:action="io.github.yedidyar.graydial.action.GRAYSCALE_ON"
+            android:targetPackage="io.github.yedidyar.graydial"
+            android:targetClass="com.graydial.android.ShortcutActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="restore_colors"
+        android:enabled="true"
+        android:icon="@drawable/ic_tile"
+        android:shortcutShortLabel="@string/shortcut_restore_short"
+        android:shortcutLongLabel="@string/shortcut_restore_long">
+        <intent
+            android:action="io.github.yedidyar.graydial.action.RESTORE_COLORS"
+            android:targetPackage="io.github.yedidyar.graydial"
+            android:targetClass="com.graydial.android.ShortcutActivity" />
+    </shortcut>
+</shortcuts>

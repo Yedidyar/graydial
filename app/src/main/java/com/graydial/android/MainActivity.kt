@@ -11,7 +11,7 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.graydial.android.domain.PermissionState
+import com.graydial.android.domain.SetupAction
 import com.graydial.android.system.ShizukuConnectionManager
 import com.graydial.android.ui.GrayDialScreen
 import com.graydial.android.ui.GrayDialViewModel
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             onRestore = viewModel::onRestoreOriginalColors,
             onReapply = viewModel::onReapply,
             onDismissRestartNotice = viewModel::onDismissRestartNotice,
-            onPermissionAction = ::onPermissionAction,
+            onSetupAction = ::onSetupAction,
             onOpenShizuku = ::openShizuku,
             versionName = BuildConfig.VERSION_NAME,
         )
@@ -51,18 +51,16 @@ class MainActivity : ComponentActivity() {
         viewModel.onResume()
     }
 
-    private fun onPermissionAction(state: PermissionState) {
-        when (state) {
-            PermissionState.SHIZUKU_NOT_INSTALLED -> openShizukuStore()
-            PermissionState.SHIZUKU_NOT_RUNNING -> openShizuku()
-            PermissionState.PERMISSION_REQUIRED, PermissionState.PERMISSION_DENIED -> {
-                if (!viewModel.onRequestPermission()) {
-                    toast("Open Shizuku › Authorized applications and allow GrayDial.")
-                    openShizuku()
-                }
+    private fun onSetupAction(action: SetupAction) {
+        when (action) {
+            SetupAction.GET_SHIZUKU -> openShizukuStore()
+            SetupAction.OPEN_SHIZUKU -> openShizuku()
+            SetupAction.REQUEST_PERMISSION -> if (!viewModel.onRequestPermission()) {
+                toast("Open Shizuku \u203a Authorized applications and allow GrayDial.")
+                openShizuku()
             }
-            PermissionState.SERVICE_DISCONNECTED -> viewModel.onReapply()
-            else -> Unit
+            SetupAction.RECONNECT -> viewModel.onReapply()
+            SetupAction.NONE -> Unit
         }
     }
 
