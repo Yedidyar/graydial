@@ -45,6 +45,7 @@ class GrayDialViewModel(app: Application) : AndroidViewModel(app) {
             permission = permission,
             working = running > 0,
             lastOutcome = outcome,
+            customPresets = prefs.customPresets,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), GrayDialUiState())
 
@@ -64,6 +65,20 @@ class GrayDialViewModel(app: Application) : AndroidViewModel(app) {
     fun onPresetSelected(preset: Preset) {
         sliderOverride.value = preset.percent
         launchTracked { controller.selectPreset(preset) }
+    }
+
+    fun onCustomPresetSelected(percent: Int) {
+        sliderOverride.value = percent
+        launchTracked { controller.applyIntensity(percent) }
+    }
+
+    fun onSaveCurrentAsPreset() {
+        val percent = uiState.value.intensity
+        viewModelScope.launch { container.preferences.addCustomPreset(percent) }
+    }
+
+    fun onRemoveCustomPreset(percent: Int) {
+        viewModelScope.launch { container.preferences.removeCustomPreset(percent) }
     }
 
     fun onRestoreOriginalColors() = launchTracked { controller.restoreOriginalColors() }

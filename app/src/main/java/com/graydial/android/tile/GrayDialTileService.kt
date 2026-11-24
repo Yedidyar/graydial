@@ -40,9 +40,11 @@ class GrayDialTileService : TileService() {
     override fun onClick() {
         super.onClick()
         val container = appContainer
-        val tile = qsTile ?: return
-        tile.subtitle = getString(R.string.tile_applying)
-        tile.updateTile()
+        // Act even if the system has not attached a Tile object; only the visual update needs it.
+        qsTile?.let {
+            it.subtitle = getString(R.string.tile_applying)
+            it.updateTile()
+        }
         // Run in the app scope so the operation completes even if the panel closes.
         container.appScope.launch {
             container.controller.toggle()

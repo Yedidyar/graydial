@@ -41,6 +41,14 @@ class GrayDialUiStateTest {
     }
 
     @Test
+    fun `save button only for new non built-in values`() {
+        assertTrue(GrayDialUiState(intensity = 95).canSaveCurrentAsPreset)
+        assertFalse(GrayDialUiState(intensity = 75).canSaveCurrentAsPreset)
+        assertFalse(GrayDialUiState(intensity = 95, customPresets = listOf(95)).canSaveCurrentAsPreset)
+        assertFalse(GrayDialUiState(intensity = 95, customPresets = (1..8).toList()).canSaveCurrentAsPreset)
+    }
+
+    @Test
     fun `preset selection reflects intensity`() {
         assertEquals(Preset.BALANCED, GrayDialUiState(intensity = 50).selectedPreset)
         assertEquals(null, GrayDialUiState(intensity = 51).selectedPreset)

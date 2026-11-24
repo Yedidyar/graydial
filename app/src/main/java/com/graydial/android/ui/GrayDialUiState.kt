@@ -20,7 +20,13 @@ data class GrayDialUiState(
     val permission: PermissionState = PermissionState.SHIZUKU_NOT_RUNNING,
     val working: Boolean = false,
     val lastOutcome: ApplyOutcome? = null,
+    val customPresets: List<Int> = emptyList(),
 ) {
+    /** The current intensity can be saved as a new preset. */
+    val canSaveCurrentAsPreset: Boolean
+        get() = Preset.matching(intensity) == null && intensity !in customPresets &&
+            customPresets.size < com.graydial.android.data.GrayDialPreferences.MAX_CUSTOM_PRESETS
+
     val selectedPreset: Preset? get() = Preset.matching(intensity)
 
     val appliedIntensity: Int? get() = appliedSaturation?.let { GrayscaleIntensity.fromSaturation(it).percent }

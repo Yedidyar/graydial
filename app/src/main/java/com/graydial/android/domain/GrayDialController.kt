@@ -78,14 +78,17 @@ class GrayDialController(
     /** Presets also switch grayscale on, except "Original", which restores normal colours. */
     suspend fun selectPreset(preset: Preset): ApplyOutcome {
         if (preset == Preset.ORIGINAL) return restoreOriginalColors(keepIntensity = false)
-        return mutex.withLock {
-            val before = preferences.current()
-            preferences.setIntensity(preset.percent)
-            preferences.setEnabled(true)
-            val outcome = applyLocked(preferences.current(), force = false)
-            if (outcome is ApplyOutcome.Failed) preferences.setEnabled(before.enabled)
-            outcome
-        }
+        return applyIntensity(preset.percent)
+    }
+
+    /** Sets the intensity and switches grayscale on (used by built-in and custom presets). */
+    suspend fun applyIntensity(percent: Int): ApplyOutcome = mutex.withLock {
+        val before = preferences.current()
+        preferences.setIntensity(GrayscaleIntensity.of(percent).percent)
+        preferences.setEnabled(true)
+        val outcome = applyLocked(preferences.current(), force = false)
+        if (outcome is ApplyOutcome.Failed) preferences.setEnabled(before.enabled)
+        outcome
     }
 
     /**

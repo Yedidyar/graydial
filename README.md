@@ -13,6 +13,7 @@ It uses Android's own compositor color pipeline (`ColorDisplayService` global sa
 - Intensity slider covering every integer from 0 to 100%, with debounced live updates.
 - Master switch. Turning it off restores normal colors and keeps your chosen intensity.
 - Presets: Original 0%, Subtle 25%, Balanced 50%, Focus 75%, Monochrome 100%.
+- Your own presets. Move the slider to any level, tap **+ Save N%** to add it next to the built-ins (up to 8), and tap **×** to remove one.
 - A spectrum preview computed with the same matrix Android applies.
 - A Quick Settings tile. Tap to toggle; long-press to open the app.
 - A **Restore original colors** button that is always visible.

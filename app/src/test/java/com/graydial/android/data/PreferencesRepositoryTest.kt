@@ -3,6 +3,7 @@ package com.graydial.android.data
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -47,6 +48,38 @@ class PreferencesRepositoryTest {
         assertEquals(20, p.lastAppliedSaturation)
         assertEquals(7, p.lastAppliedBootCount)
         assertEquals(1234L, p.lastAppliedAtMillis)
+    }
+
+    @Test
+    fun `custom presets are added sorted and removed`() = runTest {
+        assertTrue(repo.addCustomPreset(95))
+        assertTrue(repo.addCustomPreset(85))
+        assertEquals(listOf(85, 95), repo.current().customPresets)
+        repo.removeCustomPreset(85)
+        assertEquals(listOf(95), repo.current().customPresets)
+    }
+
+    @Test
+    fun `duplicate and built-in presets are not added`() = runTest {
+        assertTrue(repo.addCustomPreset(95))
+        assertFalse(repo.addCustomPreset(95))
+        assertFalse(repo.addCustomPreset(75)) // Focus already exists
+        assertEquals(listOf(95), repo.current().customPresets)
+    }
+
+    @Test
+    fun `custom preset list is capped`() = runTest {
+        (1..20).forEach { repo.addCustomPreset(it) }
+        assertEquals(GrayDialPreferences.MAX_CUSTOM_PRESETS, repo.current().customPresets.size)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `invalid custom preset is rejected`() = runTest { repo.addCustomPreset(101) }
+
+    @Test
+    fun `corrupt stored presets are cleaned on read`() = runTest {
+        dataStore.edit { it[stringPreferencesKey("custom_presets")] = "95,abc,500,95,-3,50,12" }
+        assertEquals(listOf(12, 95), repo.current().customPresets)
     }
 
     @Test(expected = IllegalArgumentException::class)

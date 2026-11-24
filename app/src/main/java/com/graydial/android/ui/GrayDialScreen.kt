@@ -1,6 +1,7 @@
 package com.graydial.android.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -19,7 +20,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -51,6 +54,9 @@ data class ScreenActions(
     val onEnabledChanged: (Boolean) -> Unit,
     val onIntensityChanged: (Int) -> Unit,
     val onPreset: (Preset) -> Unit,
+    val onCustomPreset: (Int) -> Unit,
+    val onSavePreset: () -> Unit,
+    val onRemovePreset: (Int) -> Unit,
     val onRestore: () -> Unit,
     val onReapply: () -> Unit,
     val onDismissRestartNotice: () -> Unit,
@@ -152,6 +158,28 @@ private fun MainContent(state: GrayDialUiState, actions: ScreenActions, onOpenSe
                 selected = state.selectedPreset == preset,
                 onClick = { actions.onPreset(preset) },
                 label = { Text("${preset.label} · ${preset.percent}%") },
+            )
+        }
+        state.customPresets.forEach { percent ->
+            InputChip(
+                selected = state.intensity == percent,
+                onClick = { actions.onCustomPreset(percent) },
+                label = { Text("$percent%") },
+                trailingIcon = {
+                    Text(
+                        "×",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .clickable(onClickLabel = "Remove $percent% preset") { actions.onRemovePreset(percent) }
+                            .padding(horizontal = 4.dp),
+                    )
+                },
+            )
+        }
+        if (state.canSaveCurrentAsPreset) {
+            AssistChip(
+                onClick = actions.onSavePreset,
+                label = { Text("+ Save ${state.intensity}%") },
             )
         }
     }

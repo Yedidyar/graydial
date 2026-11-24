@@ -120,6 +120,14 @@ class GrayDialControllerTest {
     }
 
     @Test
+    fun `custom preset applies its level and enables grayscale`() = runTest {
+        controller.applyIntensity(95)
+        assertEquals(listOf(5), fake.calls)
+        assertTrue(repo.current().enabled)
+        assertEquals(95, repo.current().intensity)
+    }
+
+    @Test
     fun `original preset restores colors`() = runTest {
         controller.selectPreset(Preset.FOCUS)
         controller.selectPreset(Preset.ORIGINAL)

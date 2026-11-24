@@ -4,7 +4,7 @@
 
 | Check | Command | Result |
 |---|---|---|
-| Unit tests (JVM) | `./gradlew testDebugUnitTest` | **57 passed, 0 failed** |
+| Unit tests (JVM) | `./gradlew testDebugUnitTest` | **64 passed, 0 failed** |
 | Android lint | `./gradlew lintDebug` | **No issues found** |
 | Debug / release APK | `./gradlew assembleDebug assembleRelease` | Built (release ~2.1 MB, minified, unsigned) |
 | Instrumented tests on **HyperOS 3.0 / Android 16 device** (Shizuku 13.6.0) | see below | **5 passed, 0 failed, 0 skipped** |
